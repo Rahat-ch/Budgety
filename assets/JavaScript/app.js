@@ -182,6 +182,12 @@ var uiController = (function(){
       return (type === 'exp' ? sign = '-' : sign = '+') + ' ' + int + '.' + dec;
     };
 
+    var nodeListForEach = function(list, callback){
+      for (var i = 0; i < list.length; i++) {
+        callback(list[i], i);
+      }
+    };
+
     return{
       getInput: function(){
         return{
@@ -257,13 +263,6 @@ var uiController = (function(){
 
         var fields = document.querySelectorAll(DOMstrings.expensesPercLabel);
 
-        var nodeListForEach = function(list, callback){
-          for (var i = 0; i < list.length; i++) {
-            callback(list[i], i);
-          }
-        };
-
-
         nodeListForEach(fields, function(current, index){
 
           if (percentages[index] > 0) {
@@ -277,14 +276,32 @@ var uiController = (function(){
       },
 
       displayMonth: function(){
-        var now,year;
+        var now, months, month, year;
 
-        var now = new Date();
+        now = new Date();
 
-        year.now=now.getFullYear;
-        document.querySelector(DOMstrings.dateLabel).tetContent = year;
+        months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+        month = now.getMonth();
 
-      }
+        year = now.getFullYear();
+        document.querySelector(DOMstrings.dateLabel).textContent = months[month] + ' ' + year;
+
+      },
+
+      changedType: function (){
+
+        var fields = document.querySelectorAll(
+          DOMstrings.inputType + ',' +
+          DOMstrings.inputDescription + ',' +
+          DOMstrings.inputValue
+        );
+
+        nodeListForEach(fields, function(cur){
+          cur.classList.toggle('red-focus');
+        });
+
+        document.querySelector(DOMstrings.inputBtn).classList.toggle('red');
+      },
 
       getDOMstrings: function(){
         return DOMstrings;
@@ -309,7 +326,9 @@ var controller = (function(budgetCtrl, uiCtrl){
 
     });
 
-    document.querySelector(DOM.container).addEventListener('click', ctrlDeleteItem)
+    document.querySelector(DOM.container).addEventListener('click', ctrlDeleteItem);
+
+    document.querySelector(DOM.inputType).addEventListener('change', uiController.changedType);
   };
 
   var updateBudget = function(){
@@ -391,7 +410,7 @@ var controller = (function(budgetCtrl, uiCtrl){
   return {
     init: function(){
       console.log("Application has started");
-
+      uiController.displayMonth();
       uiController.displayBudget({
         budget: 0,
         totalInc: 0,
