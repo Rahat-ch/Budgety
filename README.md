@@ -1,9 +1,5 @@
 # Budgety
 
-One Paragraph of project description goes here
-
-## Getting Started
-
 A budgeting app made with ES5 JavaScript. This app is designed to help you keep track of your monthly spending habits by allowing you to track your income and expenses. The app will also show what percentage of your monthly budget you are using and how much of it is leftover. Coded with functional programming methodologies, this heavily makes use of closures and callbacks.
 
 
